@@ -2,6 +2,8 @@ import "dart:convert";
 import "package:flutter/material.dart";
 import "package:http/http.dart";
 
+import "movie.dart";
+
 void main() {
   runApp(const MovieApp());
 }
@@ -50,12 +52,7 @@ class _HomePageState extends State<HomePage> {
 
     for (int i = 0; i < movies.length; i++) {
       final Map<String, dynamic> movie = movies[i] as Map<String, dynamic>;
-      final Movie item = Movie(
-        title: movie['title'] as String,
-        image: movie['medium_cover_image'] as String,
-        year: movie['year'] as int,
-        rating: movie['rating'] as num,
-      );
+      final Movie item = Movie.fromJson(movie);
       _movies.add(item);
     }
     setState(() {
@@ -67,14 +64,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Center(child: Text("Movie App")),
+      ),
       body: GridView.builder(
         itemCount: _movies.length,
         itemBuilder: (BuildContext context, int index) {
           final Movie movie = _movies[index];
           return GridTile(
               child: Image.network(
-                movie.image,
+                movie.mediumCoverImage,
                 fit: BoxFit.cover,
               ),
               footer: ColoredBox(
@@ -92,18 +91,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-class Movie {
-  Movie({
-    required this.title,
-    required this.image,
-    required this.year,
-    required this.rating,
-  });
-
-  final String title;
-  final String image;
-  final int year;
-  final num rating;
 }
