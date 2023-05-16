@@ -68,16 +68,27 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: ListView.builder(
+      body: GridView.builder(
         itemCount: _movies.length,
         itemBuilder: (BuildContext context, int index) {
           final Movie movie = _movies[index];
-          return ListTile(
-            title: Text('${movie.title} (${movie.year})'),
-            subtitle: Text('${movie.rating}'),
-            leading: Image.network(movie.image),
-          );
+          return GridTile(
+              child: Image.network(
+                movie.image,
+                fit: BoxFit.cover,
+              ),
+              footer: ColoredBox(
+                color: Colors.white54,
+                child: ListTile(
+                  title: Text('${movie.title} (${movie.year})'),
+                  subtitle: Text('${movie.rating}'),
+                ),
+              ));
         },
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: 0.69,
+          crossAxisCount: 2,
+        ),
       ),
     );
   }
